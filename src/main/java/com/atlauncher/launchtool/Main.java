@@ -61,7 +61,7 @@ public class Main {
             launcherExecutableFile = new File(launcherExecutable);
             launcherLocationFile = new File(launcherLocation);
 
-            if (!launcherExecutable.contains(".exe") || !launcherExecutable.contains(".jar")) {
+            if (!launcherExecutable.contains(".exe") && !launcherExecutable.contains(".jar")) {
                 System.err.println("The launcher executable location is not valid. Value given is " +
                         launcherExecutable + " Please run ATLauncher!");
                 System.exit(1);
