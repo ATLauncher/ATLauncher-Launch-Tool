@@ -47,7 +47,7 @@ public class Utils {
     }
 
 
-    public static void launch(String launcherPath) {
+    public static void launch(File launcherExecutablePath, File launcherPath) {
         List<String> arguments = new ArrayList<String>();
 
         if (Utils.isMac() && new File(new File(System.getProperty("user.dir")).getParentFile().getParentFile(),
@@ -55,7 +55,6 @@ public class Utils {
             arguments.add("open");
             arguments.add(new File(System.getProperty("user.dir")).getParentFile().getParentFile().getParentFile()
                     .getAbsolutePath());
-
         } else {
             String path = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
             if (Utils.isWindows()) {
@@ -63,10 +62,11 @@ public class Utils {
             }
             arguments.add(path);
             arguments.add("-jar");
-            arguments.add(launcherPath);
+            arguments.add(launcherExecutablePath.getAbsolutePath());
         }
 
         ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.directory(launcherPath);
         processBuilder.command(arguments);
 
         try {

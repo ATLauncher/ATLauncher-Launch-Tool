@@ -79,7 +79,7 @@ public class Main {
 
         System.out.println("Done! Launching the launcher!");
 
-        Utils.launch(launcherExecutable);
+        Utils.launch(launcherExecutableFile, launcherLocationFile);
 
         System.exit(0);
     }
