@@ -1,0 +1,13 @@
+# Ignore Everything
+/*
+/*/
+
+# Except These
+!/src/
+!/.gitignore
+!/LICENSE
+!/pom.xml
+!/IntelliJ-Coding-Style.xml
+!/README.md
+!/STYLE.md
+!/CHANGELOG.md

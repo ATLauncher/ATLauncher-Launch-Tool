@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.atlauncher</groupId>
+    <artifactId>launchtool</artifactId>
+    <name>ATLauncher Launch Tool</name>
+    <version>1.0.0.0</version>
+    <organization>
+        <name>ATLauncher</name>
+        <url>http://www.github.com/ATLauncher/</url>
+    </organization>
+    <packaging>jar</packaging>
+    <description>
+        This is a simple Java app to do things with ATLauncher such as add pack codes, auto install packs etc.
+    </description>
+    <url>https://www.atlauncher.com</url>
+
+    <properties>
+        <project.jdk.version>1.6</project.jdk.version>
+        <mainclass>com.atlauncher.launchtool.Main</mainclass>
+    </properties>
+	
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${project.jdk.version}</source>
+                    <target>${project.jdk.version}</target>
+                    <compilerVersion>${project.jdk.version}</compilerVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainclass}</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Vender>RyanTheAllmighty</Implementation-Vender>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Built-By>${user.name}</Built-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${project.name}-${project.version}</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
