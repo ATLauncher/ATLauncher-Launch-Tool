@@ -1,8 +1,8 @@
-# ATLauncher Semi Public Pack Adder
+# ATLauncher Launch Tool
 
 ### What is it?
 
-This is a simple Java web start app to add in a semi public pack code to a users ATLauncher install.
+This is a simple Java app to do things with ATLauncher such as add pack codes, auto install packs etc.
 
 ### Links
 [ATLauncher Website](http://www.atlauncher.com)
