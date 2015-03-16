@@ -22,7 +22,7 @@ Please see the STYLE.md file for coding standards and style guidelines.
 In order for this to work, you need a config.conf file in the root of the jar. The content of this file should be as below.
 
     pack_code_to_add=TestSemiPublicPackCode
-    pack_to_install=Test Pack Name
+    pack_to_install=TestPackName
     pack_share_code_to_install=T5Mwret8
 
 This is read in by the application as a Java properties file so make sure to have the correct escaping.
