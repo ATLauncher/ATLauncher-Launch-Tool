@@ -17,10 +17,13 @@
  */
 package com.atlauncher.launchtool.utils;
 
+import javax.swing.JOptionPane;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -93,5 +96,32 @@ public class Utils {
         Properties props = new Properties();
         props.load(stream);
         return props;
+    }
+
+    public static void showExitPopup(String message) {
+        System.out.println(message);
+
+        String[] options = {"Close", "Download Launcher"};
+
+        int ret = JOptionPane.showOptionDialog(null, "<html><p align=\"center\">There was an error running this " +
+                        "application!<br/><br/>If you haven't already please download and run the launcher at least " +
+                        "once.<br/><br/>If you have already done that you can try running ATLauncher once before " +
+                        "doing this again.</p></html>", "Error", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+
+        if (ret == 1) {
+            Utils.openBrowser("http://www.atlauncher.com/download");
+        }
+
+        System.exit(1);
+    }
+
+    private static void openBrowser(String URL) {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI(URL));
+            } catch (Exception e) {
+            }
+        }
     }
 }

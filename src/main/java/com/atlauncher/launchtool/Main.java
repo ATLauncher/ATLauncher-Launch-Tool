@@ -19,9 +19,11 @@ package com.atlauncher.launchtool;
 
 import com.atlauncher.launchtool.utils.Utils;
 
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 public class Main {
@@ -31,46 +33,53 @@ public class Main {
     private static File launcherExecutableFile;
     private static File launcherLocationFile;
 
+    private static File thisFile;
+
     public static void main(String[] args) {
         Properties launcherProps = null;
         Properties inputProps = null;
+
+        try {
+            thisFile = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+
+            if (thisFile.getAbsolutePath().contains("ATLauncherLaunchTool")) {
+                thisFile.deleteOnExit();
+            }
+        } catch (URISyntaxException e) {
+            thisFile = null;
+        }
 
         File launcherPropsFile = new File(Utils.getOSStorageDir(), "atlauncher.conf");
         try {
             launcherProps = Utils.readPropertiesFromFile(launcherPropsFile);
         } catch (IOException e) {
-            System.err.println("The file " + launcherPropsFile.getAbsolutePath() + " doesn't exist! Please run " +
+            Utils.showExitPopup("The file " + launcherPropsFile.getAbsolutePath() + " doesn't exist! Please run " +
                     "ATLauncher at least once!");
-            System.exit(1);
         }
 
         launcherExecutable = launcherProps.getProperty("executable", null);
         launcherLocation = launcherProps.getProperty("location", null);
 
         if (launcherExecutable == null || launcherLocation == null) {
-            System.err.println("No launcher location or executable found, please run ATLauncher!");
-            System.exit(1);
+            Utils.showExitPopup("No launcher location or executable found, please run ATLauncher!");
         }
 
         launcherExecutableFile = new File(launcherExecutable);
         launcherLocationFile = new File(launcherLocation);
 
         if (!launcherExecutable.contains(".exe") && !launcherExecutable.contains(".jar")) {
-            System.err.println("The launcher executable location is not valid. Value given is " +
+            Utils.showExitPopup("The launcher executable location is not valid. Value given is " +
                     launcherExecutable + ", please run ATLauncher!");
-            System.exit(1);
         }
 
         if (!launcherExecutableFile.exists() || !launcherLocationFile.isDirectory()) {
-            System.err.println("The launcher location or executable is not valid. Please run ATLauncher!");
-            System.exit(1);
+            Utils.showExitPopup("The launcher location or executable is not valid. Please run ATLauncher!");
         }
 
         try {
             inputProps = Utils.readPropertiesFromStream(Main.class.getResourceAsStream("/config.conf"));
         } catch (IOException e) {
-            System.err.println("The properties file inside the jar is invalid! Please redownload it and try again!");
-            System.exit(1);
+            Utils.showExitPopup("The properties file inside the jar is invalid! Please redownload it and try again!");
         }
 
         String packCodeToInstall = inputProps.getProperty("pack_code_to_add", null);
@@ -92,8 +101,7 @@ public class Main {
         try {
             launcherProps.store(new FileOutputStream(launcherPropsFile), "");
         } catch (IOException e) {
-            System.err.println("Error writing to " + launcherPropsFile.getAbsolutePath());
-            System.exit(1);
+            Utils.showExitPopup("Error writing to " + launcherPropsFile.getAbsolutePath());
         }
 
         System.out.println("Done! Launching the launcher!");
