@@ -20,7 +20,6 @@ package com.atlauncher.launchtool;
 import com.atlauncher.launchtool.utils.Utils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -33,48 +32,68 @@ public class Main {
     private static File launcherLocationFile;
 
     public static void main(String[] args) {
+        Properties launcherProps = null;
+        Properties inputProps = null;
+
+        File launcherPropsFile = new File(Utils.getOSStorageDir(), "atlauncher.conf");
         try {
-            if (!Utils.getOSStorageDir().exists()) {
-                Utils.getOSStorageDir().mkdirs();
-            }
-
-            File f = new File(Utils.getOSStorageDir(), "atlauncher.conf");
-
-            if (!f.exists()) {
-                System.err.println("The file " + f.getAbsolutePath() + " doesn't exist! Please run ATLauncher at " +
-                        "least once!");
-                System.exit(1);
-            }
-
-            Properties props = new Properties();
-            props.load(new FileInputStream(f));
-
-            launcherExecutable = props.getProperty("executable", null);
-            launcherLocation = props.getProperty("location", null);
-
-            if (launcherExecutable == null || launcherLocation == null) {
-                System.err.println("No launcher location or executable found in " + f.getAbsolutePath() + ", please " +
-                        "run ATLauncher!");
-                System.exit(1);
-            }
-
-            launcherExecutableFile = new File(launcherExecutable);
-            launcherLocationFile = new File(launcherLocation);
-
-            if (!launcherExecutable.contains(".exe") && !launcherExecutable.contains(".jar")) {
-                System.err.println("The launcher executable location is not valid. Value given is " +
-                        launcherExecutable + ", please run ATLauncher!");
-                System.exit(1);
-            }
-
-            if (!launcherExecutableFile.exists() || !launcherLocationFile.isDirectory()) {
-                System.err.println("The launcher location or executable is not valid. Please run ATLauncher!");
-                System.exit(1);
-            }
-
-            props.store(new FileOutputStream(f), "");
+            launcherProps = Utils.readPropertiesFromFile(launcherPropsFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("The file " + launcherPropsFile.getAbsolutePath() + " doesn't exist! Please run " +
+                    "ATLauncher at least once!");
+            System.exit(1);
+        }
+
+        launcherExecutable = launcherProps.getProperty("executable", null);
+        launcherLocation = launcherProps.getProperty("location", null);
+
+        if (launcherExecutable == null || launcherLocation == null) {
+            System.err.println("No launcher location or executable found, please run ATLauncher!");
+            System.exit(1);
+        }
+
+        launcherExecutableFile = new File(launcherExecutable);
+        launcherLocationFile = new File(launcherLocation);
+
+        if (!launcherExecutable.contains(".exe") && !launcherExecutable.contains(".jar")) {
+            System.err.println("The launcher executable location is not valid. Value given is " +
+                    launcherExecutable + ", please run ATLauncher!");
+            System.exit(1);
+        }
+
+        if (!launcherExecutableFile.exists() || !launcherLocationFile.isDirectory()) {
+            System.err.println("The launcher location or executable is not valid. Please run ATLauncher!");
+            System.exit(1);
+        }
+
+        try {
+            inputProps = Utils.readPropertiesFromStream(Main.class.getResourceAsStream("/config.conf"));
+        } catch (IOException e) {
+            System.err.println("The properties file inside the jar is invalid! Please redownload it and try again!");
+            System.exit(1);
+        }
+
+        String packCodeToInstall = inputProps.getProperty("pack_code_to_add", null);
+        String packToInstall = inputProps.getProperty("pack_to_install", null);
+        String packShareCodeToInstall = inputProps.getProperty("pack_share_code_to_install", null);
+
+        if (packCodeToInstall != null) {
+            launcherProps.setProperty("pack_code_to_add", packCodeToInstall);
+        }
+
+        if (packToInstall != null) {
+            launcherProps.setProperty("pack_to_install", packToInstall);
+        }
+
+        if (packShareCodeToInstall != null) {
+            launcherProps.setProperty("pack_share_code_to_install", packShareCodeToInstall);
+        }
+
+        try {
+            launcherProps.store(new FileOutputStream(launcherPropsFile), "");
+        } catch (IOException e) {
+            System.err.println("Error writing to " + launcherPropsFile.getAbsolutePath());
+            System.exit(1);
         }
 
         System.out.println("Done! Launching the launcher!");

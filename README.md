@@ -17,6 +17,16 @@ This is a simple Java app to do things with ATLauncher such as add pack codes, a
 
 Please see the STYLE.md file for coding standards and style guidelines.
 
+### The config.conf File
+
+In order for this to work, you need a config.conf file in the root of the jar. The content of this file should be as below.
+
+    pack_code_to_add=TestSemiPublicPackCode
+    pack_to_install=Test Pack Name
+    pack_share_code_to_install=T5Mwret8
+
+This is read in by the application as a Java properties file so make sure to have the correct escaping.
+
 ### Need Help/Have Questions?
 
 If you have questions please don't hesitate to [contact us](http://www.atlauncher.com/contact-us/)

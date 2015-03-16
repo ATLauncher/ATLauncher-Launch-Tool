@@ -18,9 +18,12 @@
 package com.atlauncher.launchtool.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Utils {
     public static File getOSStorageDir() {
@@ -74,5 +77,21 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Properties readPropertiesFromFile(File file) throws IOException {
+        Properties props = new Properties();
+        props.load(new FileInputStream(file));
+        return props;
+    }
+
+    public static Properties readPropertiesFromStream(InputStream stream) throws IOException {
+        if (stream == null) {
+            throw new IOException("The stream provided is incorrect while trying to read in properties!");
+        }
+
+        Properties props = new Properties();
+        props.load(stream);
+        return props;
     }
 }
