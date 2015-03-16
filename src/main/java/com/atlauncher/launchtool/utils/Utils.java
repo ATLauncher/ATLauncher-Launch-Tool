@@ -53,8 +53,8 @@ public class Utils {
         if (Utils.isMac() && new File(new File(System.getProperty("user.dir")).getParentFile().getParentFile(),
                 "MacOS").exists()) {
             arguments.add("open");
-            arguments.add(new File(System.getProperty("user.dir")).getParentFile().getParentFile().getParentFile()
-                    .getAbsolutePath());
+            arguments.add("-n");
+            arguments.add(launcherExecutablePath.getParentFile().getParentFile().getParentFile().getAbsolutePath());
         } else {
             String path = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
             if (Utils.isWindows()) {
