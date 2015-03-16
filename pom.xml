@@ -21,15 +21,6 @@
         <project.jdk.version>1.6</project.jdk.version>
         <mainclass>com.atlauncher.launchtool.Main</mainclass>
     </properties>
-	
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.4</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -72,7 +63,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>${project.name}-${project.version}</finalName>
+                            <finalName>ATLauncher-Launch-Tool</finalName>
                         </configuration>
                     </execution>
                 </executions>
